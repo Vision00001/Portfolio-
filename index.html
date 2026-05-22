@@ -1,0 +1,1573 @@
+<!-- ========================================= -->
+<!-- SAVE PROJECT IMAGE AS : photo.jpg         -->
+<!-- PUT photo.jpg IN SAME FOLDER AS index.html -->
+<!-- ========================================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vision Developer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+
+<style>
+
+:root{
+--primary:#00bfff;
+--secondary:#005dff;
+--dark:#020617;
+--glass:rgba(255,255,255,.05);
+--white:#ffffff;
+--text:#cbd5e1;
+}
+
+/* ========================================= */
+/* RESET */
+/* ========================================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+scroll-behavior:smooth;
+}
+
+body{
+background:#020617;
+overflow-x:hidden;
+color:#fff;
+}
+
+/* ========================================= */
+/* LOADER */
+/* ========================================= */
+
+.loader{
+position:fixed;
+inset:0;
+background:#000814;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+gap:30px;
+z-index:999999999;
+transition:1s ease;
+}
+
+.loader.hide{
+opacity:0;
+visibility:hidden;
+pointer-events:none;
+}
+
+.loader-ring{
+width:130px;
+height:130px;
+border-radius:50%;
+border:3px solid rgba(255,255,255,.08);
+border-top:3px solid #00bfff;
+animation:spin 1s linear infinite;
+box-shadow:
+0 0 30px #00bfff,
+0 0 90px rgba(0,191,255,.35);
+}
+
+.loader h2{
+font-size:18px;
+letter-spacing:7px;
+font-weight:700;
+}
+
+@keyframes spin{
+100%{
+transform:rotate(360deg);
+}
+}
+
+/* ========================================= */
+/* NAVBAR */
+/* ========================================= */
+
+nav{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+padding:22px 7%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+z-index:99999;
+background:rgba(0,0,0,.18);
+backdrop-filter:blur(20px);
+border-bottom:1px solid rgba(255,255,255,.05);
+transition:.4s ease;
+}
+
+nav.active{
+padding:15px 7%;
+background:rgba(0,0,0,.75);
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.logo img{
+width:60px;
+height:60px;
+border-radius:50%;
+border:2px solid #00bfff;
+box-shadow:0 0 30px rgba(0,191,255,.5);
+object-fit:cover;
+}
+
+.logo h1{
+font-size:28px;
+font-weight:800;
+background:linear-gradient(to right,#00bfff,#fff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+nav ul{
+display:flex;
+gap:38px;
+list-style:none;
+}
+
+nav ul li a{
+text-decoration:none;
+color:#fff;
+font-weight:600;
+transition:.3s;
+position:relative;
+}
+
+nav ul li a::after{
+content:'';
+position:absolute;
+left:0;
+bottom:-6px;
+width:0%;
+height:2px;
+background:#00bfff;
+transition:.4s;
+}
+
+nav ul li a:hover{
+color:#00bfff;
+}
+
+nav ul li a:hover::after{
+width:100%;
+}
+
+/* ========================================= */
+/* HERO */
+/* ========================================= */
+
+.hero{
+position:relative;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:0 7%;
+overflow:hidden;
+}
+
+#bgCanvas{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+z-index:-50;
+}
+
+.hero::before{
+content:'';
+position:absolute;
+inset:0;
+background:
+linear-gradient(to bottom,
+rgba(0,0,0,.15),
+rgba(2,6,23,.85));
+z-index:-40;
+}
+
+.horizon{
+position:absolute;
+bottom:-180px;
+left:-10%;
+width:120%;
+height:550px;
+
+background:
+linear-gradient(rgba(0,191,255,.18) 1px,transparent 1px),
+linear-gradient(90deg,rgba(0,191,255,.18) 1px,transparent 1px);
+
+background-size:70px 70px;
+
+transform:
+perspective(1000px)
+rotateX(78deg);
+
+mask-image:linear-gradient(to top,rgba(0,0,0,1),transparent);
+
+opacity:.8;
+z-index:-20;
+}
+
+.center-light{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:800px;
+height:800px;
+background:
+radial-gradient(circle,
+rgba(0,191,255,.22),
+transparent 70%);
+filter:blur(90px);
+animation:pulse 6s ease-in-out infinite;
+z-index:-25;
+}
+
+@keyframes pulse{
+50%{
+transform:translate(-50%,-50%) scale(1.08);
+}
+}
+
+.glass-orb{
+position:absolute;
+border-radius:50%;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+box-shadow:0 0 40px rgba(0,191,255,.15);
+animation:float 7s ease-in-out infinite;
+}
+
+.orb1{
+width:140px;
+height:140px;
+top:16%;
+left:10%;
+}
+
+.orb2{
+width:100px;
+height:100px;
+bottom:16%;
+right:15%;
+animation-delay:2s;
+}
+
+.orb3{
+width:70px;
+height:70px;
+top:30%;
+right:18%;
+animation-delay:1s;
+}
+
+@keyframes float{
+50%{
+transform:translateY(-25px);
+}
+}
+
+.hero-content{
+max-width:1100px;
+text-align:center;
+position:relative;
+z-index:10;
+}
+
+.hero-badge{
+display:inline-flex;
+align-items:center;
+gap:12px;
+padding:12px 24px;
+border-radius:60px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.08);
+backdrop-filter:blur(14px);
+margin-bottom:35px;
+font-size:14px;
+font-weight:600;
+animation:fadeUp 1s ease;
+}
+
+.hero-badge i{
+color:#00bfff;
+}
+
+.hero-content h2{
+font-size:110px;
+line-height:1;
+font-weight:900;
+letter-spacing:-5px;
+margin-bottom:28px;
+animation:fadeUp 1.2s ease;
+}
+
+.hero-content h2 span{
+background:linear-gradient(to right,#00bfff,#fff,#00bfff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero-content p{
+max-width:850px;
+margin:auto;
+font-size:20px;
+line-height:1.9;
+color:#b8c1cc;
+font-weight:300;
+animation:fadeUp 1.5s ease;
+}
+
+.hero-buttons{
+display:flex;
+justify-content:center;
+gap:25px;
+flex-wrap:wrap;
+margin-top:60px;
+animation:fadeUp 1.8s ease;
+}
+
+.btn{
+padding:18px 42px;
+border-radius:80px;
+text-decoration:none;
+font-size:16px;
+font-weight:700;
+display:flex;
+align-items:center;
+gap:12px;
+transition:.45s ease;
+position:relative;
+overflow:hidden;
+}
+
+.btn::before{
+content:'';
+position:absolute;
+top:0;
+left:-120%;
+width:100%;
+height:100%;
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.35),
+transparent
+);
+transition:.8s;
+}
+
+.btn:hover::before{
+left:120%;
+}
+
+.primary-btn{
+background:linear-gradient(to right,#00bfff,#005dff);
+color:#fff;
+
+box-shadow:
+0 0 30px rgba(0,191,255,.5),
+0 0 90px rgba(0,191,255,.12);
+}
+
+.secondary-btn{
+border:1px solid rgba(255,255,255,.14);
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(14px);
+color:#fff;
+}
+
+.btn:hover{
+transform:translateY(-8px) scale(1.03);
+}
+
+/* ========================================= */
+/* SECTION */
+/* ========================================= */
+
+section{
+padding:160px 8%;
+position:relative;
+overflow:hidden;
+}
+
+.section-title{
+text-align:center;
+margin-bottom:80px;
+position:relative;
+z-index:2;
+}
+
+.section-title h2{
+font-size:70px;
+font-weight:900;
+margin-bottom:16px;
+}
+
+.section-title p{
+font-size:20px;
+color:#9ca3af;
+}
+
+/* ========================================= */
+/* SERVICES */
+/* ========================================= */
+
+.services{
+background:
+radial-gradient(circle at top,
+rgba(0,191,255,.12),
+transparent 35%),
+#030712;
+}
+
+.service-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:35px;
+position:relative;
+z-index:2;
+}
+
+.card{
+position:relative;
+padding:45px;
+border-radius:35px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+backdrop-filter:blur(18px);
+overflow:hidden;
+transition:.5s cubic-bezier(.2,.8,.2,1);
+transform-style:preserve-3d;
+}
+
+.card::before{
+content:'';
+position:absolute;
+top:-120px;
+right:-120px;
+width:260px;
+height:260px;
+background:
+radial-gradient(circle,
+rgba(0,191,255,.2),
+transparent 70%);
+}
+
+.card:hover{
+transform:
+translateY(-15px)
+rotateX(5deg)
+rotateY(-5deg);
+
+box-shadow:
+0 0 40px rgba(0,191,255,.18),
+0 0 100px rgba(0,191,255,.08);
+}
+
+.card i{
+font-size:58px;
+margin-bottom:24px;
+color:#00bfff;
+}
+
+.card h3{
+font-size:30px;
+margin-bottom:16px;
+}
+
+.card p{
+font-size:16px;
+line-height:1.9;
+color:#c9d1d9;
+}
+
+/* ========================================= */
+/* PROJECT SECTION */
+/* ========================================= */
+
+.projects{
+background:
+radial-gradient(circle at center,
+rgba(0,191,255,.08),
+transparent 40%),
+#020617;
+}
+
+.project-wrapper{
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.project-frame{
+position:relative;
+width:100%;
+max-width:1200px;
+padding:2px;
+border-radius:40px;
+overflow:hidden;
+
+background:
+linear-gradient(
+130deg,
+#00bfff,
+rgba(255,255,255,.15),
+#005dff,
+rgba(255,255,255,.08),
+#00bfff
+);
+
+background-size:400% 400%;
+animation:borderFlow 10s linear infinite;
+
+box-shadow:
+0 0 40px rgba(0,191,255,.18),
+0 0 120px rgba(0,191,255,.08);
+
+transition:.5s ease;
+}
+
+@keyframes borderFlow{
+
+0%{
+background-position:0% 50%;
+}
+
+100%{
+background-position:400% 50%;
+}
+
+}
+
+.project-frame:hover{
+transform:
+translateY(-12px)
+scale(1.01);
+}
+
+.project-inner{
+background:#050b18;
+border-radius:38px;
+overflow:hidden;
+position:relative;
+}
+
+.project-image{
+position:relative;
+height:650px;
+overflow:hidden;
+}
+
+.project-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:1s ease;
+}
+
+.project-frame:hover .project-image img{
+transform:scale(1.07);
+}
+
+.project-overlay{
+position:absolute;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:
+linear-gradient(
+to top,
+rgba(2,6,23,.96),
+rgba(2,6,23,.15)
+);
+
+opacity:0;
+transition:.5s ease;
+}
+
+.project-frame:hover .project-overlay{
+opacity:1;
+}
+
+.project-button{
+padding:20px 40px;
+border-radius:80px;
+background:
+linear-gradient(to right,#00bfff,#005dff);
+
+font-weight:700;
+font-size:16px;
+color:#fff;
+
+display:flex;
+align-items:center;
+gap:12px;
+
+box-shadow:
+0 0 30px rgba(0,191,255,.4);
+}
+
+.project-content{
+padding:60px;
+}
+
+.project-badge{
+display:inline-flex;
+align-items:center;
+gap:10px;
+
+padding:12px 22px;
+border-radius:60px;
+
+background:rgba(0,191,255,.08);
+border:1px solid rgba(0,191,255,.18);
+
+margin-bottom:30px;
+
+color:#00bfff;
+font-size:13px;
+font-weight:700;
+}
+
+.project-content h3{
+font-size:58px;
+margin-bottom:24px;
+font-weight:900;
+}
+
+.project-content p{
+font-size:18px;
+line-height:1.9;
+color:#cbd5e1;
+margin-bottom:36px;
+max-width:900px;
+}
+
+.project-tags{
+display:flex;
+flex-wrap:wrap;
+gap:18px;
+}
+
+.project-tags span{
+padding:14px 24px;
+border-radius:60px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+font-size:14px;
+}
+
+/* ========================================= */
+/* CONTACT */
+/* ========================================= */
+
+.contact{
+background:#020617;
+}
+
+.contact-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:35px;
+}
+
+.contact-link{
+text-decoration:none;
+color:#fff;
+}
+
+.contact-card{
+padding:55px 35px;
+border-radius:35px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+backdrop-filter:blur(18px);
+text-align:center;
+transition:.45s ease;
+}
+
+.contact-card:hover{
+transform:translateY(-12px);
+box-shadow:0 0 40px rgba(0,191,255,.12);
+}
+
+.contact-card i{
+font-size:70px;
+margin-bottom:24px;
+color:#00bfff;
+}
+
+.contact-card h3{
+font-size:32px;
+margin-bottom:10px;
+}
+
+.contact-card p{
+font-size:16px;
+color:#d1d5db;
+word-break:break-word;
+}
+
+/* ========================================= */
+/* FOOTER */
+/* ========================================= */
+
+footer{
+padding:35px;
+text-align:center;
+background:#000814;
+border-top:1px solid rgba(255,255,255,.06);
+}
+
+footer p{
+color:#94a3b8;
+}
+
+/* ========================================= */
+/* REVEAL */
+/* ========================================= */
+
+.reveal{
+opacity:0;
+transform:translateY(70px);
+transition:1s ease;
+}
+
+.reveal.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* ========================================= */
+/* ANIMATION */
+/* ========================================= */
+
+@keyframes fadeUp{
+
+0%{
+opacity:0;
+transform:translateY(80px);
+}
+
+100%{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* ========================================= */
+/* SCROLLBAR */
+/* ========================================= */
+
+::-webkit-scrollbar{
+width:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#020617;
+}
+
+::-webkit-scrollbar-thumb{
+background:linear-gradient(#00bfff,#005dff);
+border-radius:20px;
+}
+
+/* ========================================= */
+/* MOBILE */
+/* ========================================= */
+
+@media(max-width:900px){
+
+nav{
+padding:16px 5%;
+}
+
+nav ul{
+display:none;
+}
+
+.logo h1{
+font-size:18px;
+}
+
+.logo img{
+width:50px;
+height:50px;
+}
+
+.hero{
+padding-top:120px;
+padding-bottom:80px;
+}
+
+.hero-content h2{
+font-size:58px;
+line-height:1.05;
+}
+
+.hero-content p{
+font-size:16px;
+}
+
+.hero-buttons{
+gap:18px;
+}
+
+.btn{
+width:100%;
+justify-content:center;
+}
+
+.section-title h2{
+font-size:44px;
+}
+
+.card h3{
+font-size:26px;
+}
+
+.project-image{
+height:260px;
+}
+
+.project-content{
+padding:35px 25px;
+}
+
+.project-content h3{
+font-size:34px;
+}
+
+.project-content p{
+font-size:15px;
+}
+
+.project-tags{
+gap:12px;
+}
+
+.project-tags span{
+font-size:12px;
+padding:12px 18px;
+}
+
+}
+
+/* ========================================= */
+/* END CSS */
+/* ========================================= */
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ========================================= -->
+<!-- LOADER -->
+<!-- ========================================= -->
+
+<div class="loader">
+
+<div class="loader-ring"></div>
+
+<h2>VISION DEVELOPER</h2>
+
+</div>
+
+<!-- ========================================= -->
+<!-- NAVBAR -->
+<!-- ========================================= -->
+
+<nav id="navbar">
+
+<div class="logo">
+
+<img src="logo.png" alt="logo">
+
+<h1>Vision Developer</h1>
+
+</div>
+
+<ul>
+
+<li>
+<a href="#">Home</a>
+</li>
+
+<li>
+<a href="#services">Services</a>
+</li>
+
+<li>
+<a href="#projects">Projects</a>
+</li>
+
+<li>
+<a href="#contact">Contact</a>
+</li>
+
+</ul>
+
+</nav>
+
+<!-- ========================================= -->
+<!-- HERO -->
+<!-- ========================================= -->
+
+<section class="hero">
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="center-light"></div>
+
+<div class="horizon"></div>
+
+<div class="glass-orb orb1"></div>
+<div class="glass-orb orb2"></div>
+<div class="glass-orb orb3"></div>
+
+<div class="hero-content">
+
+<div class="hero-badge">
+
+<i class="fa-solid fa-sparkles"></i>
+
+Future Ready Digital Experience
+
+</div>
+
+<h2>
+
+Build The Future With
+
+<span>Vision Developer</span>
+
+</h2>
+
+<p>
+
+Luxury futuristic websites, AI automation systems, cinematic ads and premium digital experiences crafted for next generation brands.
+
+</p>
+
+<div class="hero-buttons">
+
+<a href="#services" class="btn primary-btn">
+
+<i class="fa-solid fa-layer-group"></i>
+
+Explore Services
+
+</a>
+
+<a href="#contact" class="btn secondary-btn">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+Direct Contact
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- SERVICES -->
+<!-- ========================================= -->
+
+<section class="services reveal" id="services">
+
+<div class="section-title">
+
+<h2>Premium Services</h2>
+
+<p>
+Modern digital solutions with futuristic cinematic quality.
+</p>
+
+</div>
+
+<div class="service-grid">
+
+<div class="card">
+
+<i class="fa-solid fa-globe"></i>
+
+<h3>3D Websites</h3>
+
+<p>
+Ultra smooth futuristic websites with cinematic UI and advanced animations.
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-robot"></i>
+
+<h3>AI Automation</h3>
+
+<p>
+24/7 AI calling systems, chatbots and business automation solutions.
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<h3>Marketing</h3>
+
+<p>
+Modern audience targeting and premium growth strategies for brands.
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-film"></i>
+
+<h3>Cinematic Ads</h3>
+
+<p>
+Luxury advertisement videos with viral editing and futuristic effects.
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-camera-retro"></i>
+
+<h3>Content Creation</h3>
+
+<p>
+Premium content production for social media and online branding.
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-share-nodes"></i>
+
+<h3>Social Media Growth</h3>
+
+<p>
+Professional social media management and premium account scaling.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- PROJECTS -->
+<!-- ========================================= -->
+
+<section class="projects reveal" id="projects">
+
+<div class="section-title">
+
+<h2>Small Glimpse Of Our Work</h2>
+
+<p>
+
+Immersive futuristic interfaces crafted with cinematic interaction and premium digital aesthetics.
+
+</p>
+
+</div>
+
+<div class="project-wrapper">
+
+<a href="https://spafoundation001.github.io/SmartMenu/"
+target="_blank"
+style="text-decoration:none;color:#fff;width:100%;">
+
+<div class="project-frame">
+
+<div class="project-inner">
+
+<div class="project-image">
+
+<img src="photo.jpg" alt="project">
+
+<div class="project-overlay">
+
+<div class="project-button">
+
+<i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+Open Live Project
+
+</div>
+
+</div>
+
+</div>
+
+<div class="project-content">
+
+<div class="project-badge">
+
+<i class="fa-solid fa-bolt"></i>
+
+Featured Premium Experience
+
+</div>
+
+<h3>Smart Menu System</h3>
+
+<p>
+
+A futuristic AI powered restaurant menu experience with immersive transitions, luxury interaction design, modern layout aesthetics and smooth cinematic animations crafted for next generation restaurant brands.
+
+</p>
+
+<div class="project-tags">
+
+<span>Luxury UI</span>
+
+<span>AI Experience</span>
+
+<span>Interactive Design</span>
+
+<span>Modern Animation</span>
+
+<span>Premium Branding</span>
+
+<span>Mobile Optimized</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</a>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- CONTACT -->
+<!-- ========================================= -->
+
+<section class="contact reveal" id="contact">
+
+<div class="section-title">
+
+<h2>Let's Connect</h2>
+
+<p>
+
+Ready to build something legendary together.
+
+</p>
+
+</div>
+
+<div class="contact-grid">
+
+<a href="https://insta.openinapp.co/6px8j"
+target="_blank"
+class="contact-link">
+
+<div class="contact-card">
+
+<i class="fa-brands fa-instagram"></i>
+
+<h3>Instagram</h3>
+
+<p>Vision Developer</p>
+
+</div>
+
+</a>
+
+<a href="https://wa.me/919546876660"
+class="contact-link">
+
+<div class="contact-card">
+
+<i class="fa-brands fa-whatsapp"></i>
+
+<h3>WhatsApp</h3>
+
+<p>+91 9546876660</p>
+
+</div>
+
+</a>
+
+<a href="mailto:visiondeveloper.global@gmail.com"
+class="contact-link">
+
+<div class="contact-card">
+
+<i class="fa-solid fa-envelope"></i>
+
+<h3>Email</h3>
+
+<p>visiondeveloper.global@gmail.com</p>
+
+</div>
+
+</a>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- FOOTER -->
+<!-- ========================================= -->
+
+<footer>
+
+<p>
+
+© 2026 Vision Developer — Future Ready Digital Experiences.
+
+</p>
+
+</footer>
+
+<script>
+
+/* ========================================= */
+/* LOADER */
+/* ========================================= */
+
+window.addEventListener("load",()=>{
+
+const loader=document.querySelector(".loader");
+
+setTimeout(()=>{
+
+loader.classList.add("hide");
+
+setTimeout(()=>{
+loader.remove();
+},1000);
+
+},1500);
+
+});
+
+/* ========================================= */
+/* NAVBAR */
+/* ========================================= */
+
+const navbar=document.getElementById("navbar");
+
+window.addEventListener("scroll",()=>{
+
+navbar.classList.toggle(
+"active",
+window.scrollY>50
+);
+
+});
+
+/* ========================================= */
+/* REVEAL */
+/* ========================================= */
+
+const observer=new IntersectionObserver((entries)=>{
+
+entries.forEach((entry)=>{
+
+if(entry.isIntersecting){
+
+entry.target.classList.add("active");
+
+}
+
+});
+
+},{
+threshold:.15
+});
+
+document.querySelectorAll(".reveal").forEach((el)=>{
+
+observer.observe(el);
+
+});
+
+/* ========================================= */
+/* THREE JS */
+/* ========================================= */
+
+const scene=new THREE.Scene();
+
+scene.fog=new THREE.FogExp2(0x020617,0.001);
+
+/* CAMERA */
+
+const camera=new THREE.PerspectiveCamera(
+70,
+window.innerWidth/window.innerHeight,
+0.1,
+3000
+);
+
+camera.position.z=90;
+
+/* RENDERER */
+
+const renderer=new THREE.WebGLRenderer({
+canvas:document.getElementById("bgCanvas"),
+alpha:true,
+antialias:true,
+powerPreference:"high-performance"
+});
+
+renderer.setSize(
+window.innerWidth,
+window.innerHeight
+);
+
+renderer.setPixelRatio(
+Math.min(window.devicePixelRatio,2)
+);
+
+/* PARTICLES */
+
+const particlesGeometry=
+new THREE.BufferGeometry();
+
+const particlesCount=6000;
+
+const positions=
+new Float32Array(particlesCount*3);
+
+for(let i=0;i<particlesCount*3;i++){
+
+positions[i]=
+(Math.random()-0.5)*1400;
+
+}
+
+particlesGeometry.setAttribute(
+"position",
+new THREE.BufferAttribute(positions,3)
+);
+
+const particlesMaterial=
+new THREE.PointsMaterial({
+
+color:"#00bfff",
+size:.8,
+transparent:true,
+opacity:.8
+
+});
+
+const particles=
+new THREE.Points(
+particlesGeometry,
+particlesMaterial
+);
+
+scene.add(particles);
+
+/* FLOATING RINGS */
+
+const ringGroup=new THREE.Group();
+
+for(let i=0;i<3;i++){
+
+const geometry=
+new THREE.TorusGeometry(
+28+i*10,
+0.5,
+16,
+200
+);
+
+const material=
+new THREE.MeshBasicMaterial({
+
+color:0x00bfff,
+transparent:true,
+opacity:0.25
+
+});
+
+const ring=
+new THREE.Mesh(
+geometry,
+material
+);
+
+ring.rotation.x=
+Math.PI/2;
+
+ringGroup.add(ring);
+
+}
+
+scene.add(ringGroup);
+
+/* CENTER SPHERE */
+
+const sphereGeometry=
+new THREE.SphereGeometry(
+10,
+64,
+64
+);
+
+const sphereMaterial=
+new THREE.MeshPhysicalMaterial({
+
+color:0x00bfff,
+emissive:0x003cff,
+emissiveIntensity:1,
+metalness:1,
+roughness:.1,
+transparent:true,
+opacity:.9
+
+});
+
+const sphere=
+new THREE.Mesh(
+sphereGeometry,
+sphereMaterial
+);
+
+scene.add(sphere);
+
+/* LIGHTS */
+
+const pointLight=
+new THREE.PointLight(
+0x00bfff,
+2
+);
+
+pointLight.position.set(50,50,50);
+
+scene.add(pointLight);
+
+const ambient=
+new THREE.AmbientLight(
+0xffffff,
+0.35
+);
+
+scene.add(ambient);
+
+/* MOUSE */
+
+let mouseX=0;
+let mouseY=0;
+
+let targetX=0;
+let targetY=0;
+
+document.addEventListener("mousemove",(e)=>{
+
+targetX=
+(e.clientX/window.innerWidth-.5)*10;
+
+targetY=
+(e.clientY/window.innerHeight-.5)*8;
+
+});
+
+/* ANIMATION */
+
+function animate(){
+
+requestAnimationFrame(animate);
+
+mouseX+=(targetX-mouseX)*.03;
+mouseY+=(targetY-mouseY)*.03;
+
+camera.position.x=mouseX;
+camera.position.y=-mouseY;
+
+particles.rotation.y+=.0003;
+particles.rotation.x+=.00005;
+
+ringGroup.rotation.z+=.0015;
+ringGroup.rotation.x+=.0005;
+
+sphere.rotation.y+=.003;
+
+sphere.position.y=
+Math.sin(Date.now()*.0015)*2;
+
+renderer.render(scene,camera);
+
+}
+
+animate();
+
+/* RESPONSIVE */
+
+window.addEventListener("resize",()=>{
+
+camera.aspect=
+window.innerWidth/window.innerHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(
+window.innerWidth,
+window.innerHeight
+);
+
+});
+
+</script>
+
+</body>
+
+</html>
